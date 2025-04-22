@@ -1,5 +1,6 @@
 # kvProcessor
- 
+
+[**PYPI Package**](https://pypi.org/project/kvprocessor/) \
 A Python package for processing and validating configuration dictionaries against a custom `.kv` file format.
 
 ## Installation

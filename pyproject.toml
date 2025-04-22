@@ -1,6 +1,6 @@
 [project]
 name = "kvprocessor"
-version = "0.1.0"
+version = "0.1.2"
 description = "A Python package for processing and validating configuration dictionaries against a custom .kv file format"
 readme = "README.md"
 authors = [{name = "[Your Name]", email = "connor@connor33341.dev"}]
