@@ -1,9 +1,22 @@
-from kvprocessor import LoadEnv, KVProcessor
+import os
+import dotenv
+from kvprocessor import LoadEnv, KVProcessor, KVStructLoader
+dotenv.load_dotenv() # Load the .env file
 
-if __name__ == "__main__":
+def test_file():
     kv_file_path = "test/test.kv" # Directory to .kv file
     kv_processor = KVProcessor(kv_file_path) # Create a KV processor class
     kv_keys = kv_processor.return_names() # Gets the keys (VARIBLENAME) from the .kv file
     env_list = LoadEnv(kv_keys) # Loads all the ENV varibles that match those keys
     validated_config = kv_processor.process_config(env_list) # Verifies that those env varibles exist and are of the correct type
     print(validated_config)
+
+def test_struct_loader():
+    kv_struct_loader = KVStructLoader("https://github.com/Voxa-Communications/VoxaCommunicaitons-Structures/raw/refs/heads/main/struct/config.json")
+    print(kv_struct_loader.root)
+    print(kv_struct_loader.URL)
+    kv_struct_loader.from_namespace("voxa.api.user.user_settings")
+
+if __name__ == "__main__":
+    test_file()
+    test_struct_loader()
