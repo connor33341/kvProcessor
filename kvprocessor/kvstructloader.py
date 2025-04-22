@@ -34,6 +34,7 @@ class KVStructLoader:
 
             with open(file_dir, 'wb') as file:
                 for chunk in response.iter_content(chunk_size=8192):
+                    log(f"Writing chunk of size: {len(chunk)}")
                     file.write(chunk)
             log(f"KV file saved to: {file_dir}")
             kv_processor = KVProcessor(file_dir)

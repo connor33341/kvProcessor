@@ -12,10 +12,10 @@ def test_file():
     print(validated_config)
 
 def test_struct_loader():
-    kv_struct_loader = KVStructLoader("https://github.com/Voxa-Communications/VoxaCommunicaitons-Structures/raw/refs/heads/main/struct/config.json")
+    kv_struct_loader = KVStructLoader("https://github.com/Voxa-Communications/VoxaCommunicaitons-Structures/raw/refs/heads/main/struct/config.json") # Create a KVStructLoader object with the URL of the config file
     print(kv_struct_loader.root)
     print(kv_struct_loader.URL)
-    kv_struct_loader.from_namespace("voxa.api.user.user_settings")
+    kv_struct_loader.from_namespace("voxa.api.user.user_settings") # Loads the KV file from the URL and returns a KVProcessor object
 
 if __name__ == "__main__":
     test_file()
