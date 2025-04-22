@@ -1,0 +1,25 @@
+[project]
+name = "kvprocessor"
+version = "0.1.0"
+description = "A Python package for processing and validating configuration dictionaries against a custom .kv file format"
+readme = "README.md"
+authors = [{name = "[Your Name]", email = "connor@connor33341.dev"}]
+license = {file = "LICENSE"}
+classifiers = [
+    "License :: OSI Approved :: MIT License",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.8",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+]
+dependencies = []
+requires-python = ">=3.8"
+
+[project.urls]
+Homepage = "https://github.com/connor33341/kvprocessor"
+Repository = "https://github.com/connor33341/kvprocessor"
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
