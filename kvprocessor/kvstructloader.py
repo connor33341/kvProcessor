@@ -1,5 +1,7 @@
 import requests
 import os
+import shutil
+from pathlib import Path
 from kvprocessor.kvprocessor import KVProcessor
 from kvprocessor.kvmanifestloader import KVManifestLoader
 from kvprocessor.log import log
@@ -9,6 +11,9 @@ class KVStructLoader:
         log(f"Fetching Config, from file: {config_file}")
         self.config_file = config_file
         self.cache_dir = cache_dir
+        if os.path.exists(self.cache_dir):
+            log(f"Cache directory exists: {self.cache_dir}, clearing")
+            shutil.rmtree(self.cache_dir)
         self.config = self._fetch_config()
         log(f"Config loaded: {self.config}")
         self.version = self.config["version"] if self.config else None
@@ -31,7 +36,6 @@ class KVStructLoader:
             log(f"Version: {self.version} < 7, this version has limited features")
             self.URL = self.config["URL"] if self.config else None
         
-        
     def _fetch_config(self):
         try:
             response = requests.get(self.config_file)
@@ -45,6 +49,11 @@ class KVStructLoader:
         log(f"Fetching KV file from URL: {url}")
         try:
             file_dir = os.path.join(self.cache_dir, f"{namespace}.kv")
+            file_path = Path(file_dir)
+            if file_path.exists():
+                with open(file_path, 'r') as file:
+                    log(f"KV file already exists, loading from: {file_dir}")
+                    return KVProcessor(file_dir)
             log(f"Saving KV file to: {file_dir}")
             os.makedirs(os.path.dirname(file_dir), exist_ok=True)
             response = requests.get(url, stream=True)

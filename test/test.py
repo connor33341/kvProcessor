@@ -24,7 +24,6 @@ def test_struct_loader():
     }
     validated_config = kv_processor.process_config(user_settings) # Verifies that those env varibles exist and are of the correct type
     print(validated_config)
-
 if __name__ == "__main__":
     test_file()
     test_struct_loader()
