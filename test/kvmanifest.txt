@@ -1,0 +1,2 @@
+# A manifest of namespace changes
+voxa.user:voxa.api.user.user
