@@ -72,11 +72,11 @@ Namespace JSON files, have to be on a static host. They cannot be used locally. 
  - A "root", the name that preceedes the rest of the namespace. Ex: `voxa` in `voxa.api.user.user_settings`
  - A "URL". Ex: `https://mysite.example/kvstructures`, when the namespace `mysite.folder.structure` is used (assuming `root` is set to `mysite`), will fetch `https://mysite.example/kvstructures/folder/structure.kv`
 
- Here is an example JSON:
+ Here is an example JSON (Note: on 0.7.1+ the URL is not needed, however a `struct` needs to be defined):
 ```json
 {
     "root": "voxa",
-    "version": "1.0.0",
+    "version": "0.1.5",
     "URL": "https://raw.githubusercontent.com/Voxa-Communications/VoxaCommunicaitons-Structures/refs/heads/main/struct/"
 }
 ```

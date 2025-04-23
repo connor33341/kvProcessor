@@ -1,5 +1,10 @@
 {
     "root": "voxa",
-    "version": "1.0.0",
-    "URL": "https://raw.githubusercontent.com/Voxa-Communications/VoxaCommunicaitons-Structures/refs/heads/main/struct/"
+    "version": "0.1.8",
+    "platform": "github",
+    "owner": "Voxa-Communications",
+    "repo": "VoxaCommunicaitons-Structures",
+    "branch": "main",
+    "struct": "struct",
+    "manifest": "kvmanifest.txt"
 }

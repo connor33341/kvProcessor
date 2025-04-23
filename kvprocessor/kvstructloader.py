@@ -9,8 +9,24 @@ class KVStructLoader:
         self.config_file = config_file
         self.cache_dir = cache_dir
         self.config = self._fetch_config()
+        log(f"Config loaded: {self.config}")
+        self.version = self.config["version"] if self.config else None
         self.root = self.config["root"] if self.config else None
-        self.URL = self.config["URL"] if self.config else None
+        self.Manifest = None
+        if int(str(self.version).split(".")[2]) >= 7:
+            self.Platform = self.config["platform"] if self.config else None
+            if str(self.Platform).lower() == "github":
+                self.Owner = self.config["owner"] if self.config else None
+                self.Repo = self.config["repo"] if self.config else None
+                self.Branch = self.config["branch"] if self.config else None
+                self.Struct = self.config["struct"] if self.config else None
+                self.URL = f"https://raw.githubusercontent.com/{self.Owner}/{self.Repo}/refs/heads/{self.Branch}/{self.Struct}/"
+            else:
+                self.URL = self.config["URL"] if self.config else None
+            self.Manifest = self.config["manifest"] if self.config else None
+        else:
+            self.URL = self.config["URL"] if self.config else None
+        
         
     def _fetch_config(self):
         try:

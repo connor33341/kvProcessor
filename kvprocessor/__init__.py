@@ -1,4 +1,4 @@
-__version__ = "0.1.7"
+__version__ = "0.1.8"
 
 from .kvprocessor import KVProcessor
 from .kvenvloader import LoadEnv
