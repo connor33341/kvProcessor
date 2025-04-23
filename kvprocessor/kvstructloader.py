@@ -1,10 +1,8 @@
 import requests
 import os
 from kvprocessor.kvprocessor import KVProcessor
+from kvprocessor.log import log
 
-def log(message: str):
-    if os.environ.get("DEBUG"):
-        print(message)
 class KVStructLoader:
     def __init__(self, config_file: str, cache_dir: str = "./struct"):
         log(f"Fetching Config, from file: {config_file}")

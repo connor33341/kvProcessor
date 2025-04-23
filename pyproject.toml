@@ -1,9 +1,9 @@
 [project]
 name = "kvprocessor"
-version = "0.1.6"
+version = "0.1.7"
 description = "A Python package for processing and validating configuration dictionaries against a custom .kv file format"
 readme = "README.md"
-authors = [{name = "[Your Name]", email = "connor@connor33341.dev"}]
+authors = [{name = "connor33341", email = "connor@connor33341.dev"}]
 license = {file = "LICENSE"}
 classifiers = [
     "License :: OSI Approved :: MIT License",

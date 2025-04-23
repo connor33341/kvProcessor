@@ -1,5 +1,6 @@
 import re
 from typing import Dict, Any, Union
+from kvprocessor.log import log
 
 class KVProcessor:
     def __init__(self, kv_file_path: str):
@@ -10,17 +11,21 @@ class KVProcessor:
         spec = {}
         try:
             with open(file_path, 'r') as file:
+                i = -1
                 for line in file:
+                    i += 1
                     line = line.strip()
                     if not line or line.startswith('#'):
                         continue
                     # Match format: KEY<type>:default
-                    match = re.match(r'(\w+)<([\w\|]+)>:(\w+|none)', line)
+                    if line.split("#"):
+                        line = line.split("#")[0].strip()
+                    match = re.match(r'(\w+)<([\w\|]+)>:([\w+]+|none)', line)
                     if not match:
                         raise ValueError(f"Invalid .kv file format in line: {line}")
                     key, type_str, default = match.groups()
                     types = type_str.split('|')
-                    #print(f"Parsed {key}: types={types}, default={default}")
+                    log(f"Parsing Line {i} key={key}, types={types}, default={default}")
                     spec[key] = {
                         'types': types,
                         'default': None if default == 'none' else default
@@ -33,7 +38,17 @@ class KVProcessor:
         """Validate if the value matches one of the expected types."""
         type_map = {
             'string': str,
-            'int': int
+            'int': int,
+            'float': float,
+            'bool': bool,
+            'none': type(None),
+            'list': list,
+            'dict': dict,
+            'tuple': tuple,
+            'set': set,
+            'object': object,
+            'any': Any,
+            'str': str
         }
         for type_name in expected_types:
             if type_name not in type_map:
@@ -50,6 +65,7 @@ class KVProcessor:
         result = {}
         for key, spec in self.config_spec.items():
             value = config.get(key, spec['default'])
+            log(f"Processing {key}: value={value}, default={spec['default']}")
             
             # If value is None (either from input or default), skip type checking
             if value is not None:
@@ -57,6 +73,9 @@ class KVProcessor:
                     raise TypeError(
                         f"Invalid type for {key}: expected {spec['types']}, got {type(value).__name__}"
                     )
+            else:
+                if spec['default'] is not None:
+                    value = spec['default']
             result[key] = value
 
         # Check for unexpected keys in input dict
