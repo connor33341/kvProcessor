@@ -1,6 +1,7 @@
 # kvProcessor
 
 [**PYPI Package**](https://pypi.org/project/kvprocessor/) \
+[**GitHub**](https://github.com/connor33341/kvProcessor) \
 A Python package for processing and validating configuration dictionaries against a custom `.kv` file format.
 
 ## Installation
@@ -14,6 +15,7 @@ pip install kvprocessor
 ## File format
 
 ```custom
+# Comments are defined by a "#"
 VARIBLENAME<TYPE>:DEFAULTVAULE
 ```
 
@@ -63,3 +65,35 @@ validated_config = kv_processor.process_config(user_settings)
 print(validated_config)
 ```
 For an example config.json navigate to `test/config.json`. This file is just what is found on `https://github.com/Voxa-Communications/VoxaCommunicaitons-Structures/blob/main/struct/config.json` which is used in this example.
+
+### Namespace's config.json
+Namespace JSON files, have to be on a static host. They cannot be used locally. The easiest way to do this is to make a github repo, and use the raw file.
+#### A config.json in a namespace should include at least two parts:
+ - A "root", the name that preceedes the rest of the namespace. Ex: `voxa` in `voxa.api.user.user_settings`
+ - A "URL". Ex: `https://mysite.example/kvstructures`, when the namespace `mysite.folder.structure` is used (assuming `root` is set to `mysite`), will fetch `https://mysite.example/kvstructures/folder/structure.kv`
+
+ Here is an example JSON:
+```json
+{
+    "root": "voxa",
+    "version": "1.0.0",
+    "URL": "https://raw.githubusercontent.com/Voxa-Communications/VoxaCommunicaitons-Structures/refs/heads/main/struct/"
+}
+```
+
+## Building
+For building the library locally \
+**Requires**: `python3.8+`, `pip`, `linux system`(if using the predefined shell files)
+
+ 1. `git clone https://github.com/connor33341/kvProcessor.git`
+ 2. `cd kvProcessor`
+ 3. `bash build.sh`
+
+`build.sh` will also install kvProcessor as a local package, which you will be able to use.
+If you add new features to your fork, and would like them to be featured on the main repo. Submit a Pull Request
+## For the nerds
+The syntax was already mentioned, however if you would like to see how it parses. The following regex is used to determine the: `name`, `type`, and `default`:
+```re
+(\w+)<([\w\|]+)>:([\w+]+|none)
+```
+With this knowlege, you probably can figure out a way to write .kv files in a weird way. Out of typical standard.
