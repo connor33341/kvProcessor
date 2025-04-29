@@ -1,6 +1,7 @@
 import re
 from typing import Dict, Any, Union
 from kvprocessor.log import log
+from kvprocessor.errors import InvalidKVFileError
 
 class KVProcessor:
     def __init__(self, kv_file_path: str):
@@ -17,12 +18,11 @@ class KVProcessor:
                     line = line.strip()
                     if not line or line.startswith('#'):
                         continue
-                    # Match format: KEY<type>:default
                     if line.split("#"):
                         line = line.split("#")[0].strip()
                     match = re.match(r'(\w+)<([\w\|]+)>:([\w+]+|none)', line)
                     if not match:
-                        raise ValueError(f"Invalid .kv file format in line: {line}")
+                        raise InvalidKVFileError(f"Invalid .kv file format in line {i + 1}: {line}")
                     key, type_str, default = match.groups()
                     types = type_str.split('|')
                     log(f"Parsing Line {i} key={key}, types={types}, default={default}")

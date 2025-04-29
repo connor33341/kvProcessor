@@ -42,9 +42,15 @@ class KVManifestLoader:
                     line = line.strip()
                     if not line or line.startswith('#'):
                         continue
-                    match = re.match(r'([^:]+):([^:]+)', line)
+                    match: dict = re.match(r'([^:]+):([^:]+)', line)
                     if not match:
+                        if (len(line.split(":")) == 0) and (len(line.split(".") >= 1)):
+                            log("Found namespace")
+                            match.clear()
+                            match[str(line).strip()] = str(line).strip()
                         raise ValueError(f"Invalid manifest file format in line: {line}")
+                    else:
+                        log("Found namespace overide")
                     key, value = match.groups()
                     log(f"Parsing Line {i} key={key}, value={value}")    
                     self.namespace_overides[key] = value     

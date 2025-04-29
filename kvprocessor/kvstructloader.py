@@ -5,6 +5,7 @@ from pathlib import Path
 from kvprocessor.kvprocessor import KVProcessor
 from kvprocessor.kvmanifestloader import KVManifestLoader
 from kvprocessor.log import log
+from kvprocessor.errors import NamespaceNotFoundError, InvalidNamespaceError
 
 class KVStructLoaderError(Exception):
     """Base exception for KVStructLoader."""
@@ -88,6 +89,9 @@ class KVStructLoader:
             raise KVFetchError(f"Error fetching KV file: {e}")
         
     def from_namespace(self, namespace: str) -> KVProcessor:
+        if not namespace or not isinstance(namespace, str):
+            raise InvalidNamespaceError("Namespace must be a non-empty string.")
+        
         if self.Manifest:
             log(f"Using Manifest to load KVProcessor from namespace: {namespace}")
             if namespace in self.Manifest.namespace_overides:
@@ -95,7 +99,7 @@ class KVStructLoader:
                 log(f"Namespace overridden to: {namespace}")
             else:
                 log(f"Namespace not found in manifest, using original: {namespace}")
-        log(f"Loading KVProcessor from namespace: {namespace}")
+                log(f"Loading KVProcessor from namespace: {namespace}")
         if not self.config:
             raise ConfigFetchError("Config not loaded. Please check the config file URL.")
         
@@ -127,3 +131,9 @@ class KVStructLoader:
             raise ManifestError("Manifest is not loaded.")
         log(f"Manifest details: {self.Manifest}")
         return self.Manifest
+
+    def list_available_namespaces(self) -> list:
+        """List all available namespaces from the manifest."""
+        if not self.Manifest:
+            raise ManifestError("Manifest is not loaded.")
+        return list(self.Manifest.namespace_overides.keys())
