@@ -1,6 +1,6 @@
 [project]
 name = "kvprocessor"
-version = "0.1.10"
+version = "0.1.12"
 description = "A Python package for processing and validating configuration dictionaries against a custom .kv file format"
 readme = "README.md"
 authors = [{name = "connor33341", email = "connor@connor33341.dev"}]
@@ -16,7 +16,7 @@ classifiers = [
 dependencies = [
     "requests>=2.25.0",
 ]
-requires-python = ">=3.8"
+requires-python = ">=3.9"
 
 [project.urls]
 Homepage = "https://github.com/connor33341/kvprocessor"
