@@ -1,6 +1,8 @@
 import os
 import dotenv
 from kvprocessor import LoadEnv, KVProcessor, KVStructLoader
+from kvprocessor.kvfileutils import search_kv_files, copy_kv_file, delete_kv_file
+from kvprocessor.kvversionmanager import KVVersionManager
 dotenv.load_dotenv() # Load the .env file
 
 def test_file():
@@ -24,6 +26,39 @@ def test_struct_loader():
     }
     validated_config = kv_processor.process_config(user_settings) # Verifies that those env varibles exist and are of the correct type
     print(validated_config)
+
+def test_file_operations():
+    print("Testing file operations")
+    kv_files = search_kv_files("test")
+    print("Found .kv files:", kv_files)
+
+    if kv_files:
+        test_file = kv_files[0]
+        copy_path = "test/copy_test.kv"
+        copy_kv_file(test_file, copy_path)
+        print(f"Copied {test_file} to {copy_path}")
+
+        delete_kv_file(copy_path)
+        print(f"Deleted {copy_path}")
+
+def test_version_manager():
+    print("Testing version manager")
+    version_manager = KVVersionManager("test/versions")
+
+    test_file = "test/test.kv"
+    versioned_file = version_manager.save_version(test_file)
+    print(f"Saved version: {versioned_file}")
+
+    versions = version_manager.list_versions("test.kv")
+    print("Available versions:", versions)
+
+    if versions:
+        restore_path = "test/restored_test.kv"
+        version_manager.restore_version("test.kv", versions[0].split(".")[-1], restore_path)
+        print(f"Restored version to: {restore_path}")
+
 if __name__ == "__main__":
     test_file()
     test_struct_loader()
+    test_file_operations()
+    test_version_manager()
