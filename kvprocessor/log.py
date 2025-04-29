@@ -1,12 +1,23 @@
-import os
+import logging
+
+# Configure logging
+logging.basicConfig(
+    level=logging.DEBUG,
+    format='%(asctime)s - %(levelname)s - %(message)s',
+    handlers=[
+        logging.StreamHandler(),
+        logging.FileHandler("kvprocessor.log", mode="a")
+    ]
+)
 
 def log(message: str):
-    if os.environ.get("DEBUG"):
-        print(f"INFO: {message}")
+    logging.info(message)
 
 def log_error(message: str):
-    print(f"ERROR: {message}")
+    logging.error(message)
 
 def log_debug(message: str):
-    if os.environ.get("DEBUG"):
-        print(f"DEBUG: {message}")
+    logging.debug(message)
+
+def log_warning(message: str):
+    logging.warning(message)
