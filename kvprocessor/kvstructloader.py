@@ -5,23 +5,7 @@ from pathlib import Path
 from kvprocessor.kvprocessor import KVProcessor
 from kvprocessor.kvmanifestloader import KVManifestLoader
 from kvprocessor.log import log
-from kvprocessor.errors import NamespaceNotFoundError, InvalidNamespaceError
-
-class KVStructLoaderError(Exception):
-    """Base exception for KVStructLoader."""
-    pass
-
-class ConfigFetchError(KVStructLoaderError):
-    """Raised when there is an error fetching the configuration."""
-    pass
-
-class KVFetchError(KVStructLoaderError):
-    """Raised when there is an error fetching a KV file."""
-    pass
-
-class ManifestError(KVStructLoaderError):
-    """Raised when there is an issue with the manifest."""
-    pass
+from kvprocessor.errors import NamespaceNotFoundError, InvalidNamespaceError, ManifestError, ConfigFetchError, KVFetchError
 
 class KVStructLoader:
     def __init__(self, config_file: str, cache_dir: str = "./struct"):
