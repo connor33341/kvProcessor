@@ -2,6 +2,7 @@ import re
 from typing import Dict, Any, Union
 from kvprocessor.log import log
 from kvprocessor.errors import InvalidKVFileError
+from kvprocessor.kvtypemap import get_type_map
 
 class KVProcessor:
     def __init__(self, kv_file_path: str):
@@ -36,20 +37,7 @@ class KVProcessor:
 
     def _validate_type(self, value: Any, expected_types: list) -> bool:
         """Validate if the value matches one of the expected types."""
-        type_map = {
-            'string': str,
-            'int': int,
-            'float': float,
-            'bool': bool,
-            'none': type(None),
-            'list': list,
-            'dict': dict,
-            'tuple': tuple,
-            'set': set,
-            'object': object,
-            'any': Any,
-            'str': str
-        }
+        type_map = get_type_map()
         for type_name in expected_types:
             if type_name not in type_map:
                 raise ValueError(f"Unsupported type in .kv file: {type_name}")
