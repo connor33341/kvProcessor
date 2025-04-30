@@ -2,6 +2,7 @@ import os
 import requests
 import re
 from kvprocessor.kvprocessor import KVProcessor
+from kvprocessor.kvstructloader import KVStructLoader
 from kvprocessor.log import log
 
 class KVManifestLoader:
@@ -13,6 +14,7 @@ class KVManifestLoader:
         self.namespace_overides = {}
         self._fetch_manifest()
         self._parse_manifest()
+        self.manifest_version = "0.1.12"
 
     def _fetch_manifest(self):
         try:
@@ -44,11 +46,12 @@ class KVManifestLoader:
                         continue
                     match: dict = re.match(r'([^:]+):([^:]+)', line)
                     if not match:
-                        if (len(line.split(":")) == 0) and (len(line.split(".") >= 1)):
-                            log("Found namespace")
-                            match.clear()
-                            match[str(line).strip()] = str(line).strip()
-                        raise ValueError(f"Invalid manifest file format in line: {line}")
+                        if str(self.manifest_version).strip().split(".")[1] >= 2:
+                            if (len(line.split(":")) == 0) and (len(line.split(".") >= 1)):
+                                log("Found namespace")
+                                match.clear()
+                                match[str(line).strip()] = str(line).strip()
+                            raise ValueError(f"Invalid manifest file format in line: {line}")
                     else:
                         log("Found namespace overide")
                     key, value = match.groups()

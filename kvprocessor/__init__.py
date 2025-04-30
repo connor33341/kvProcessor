@@ -6,4 +6,7 @@ from .kvstructloader import KVStructLoader
 from .kvfileexporter import KVFileExporter
 from .kvfilemerger import KVFileMerger
 from .kvdiff import KVFileDiffChecker
+from .kvvalidator import KVFileValidator
+from .kvversionmanager import KVVersionManager
+from .kvdiff import KVFileDiffChecker
 from .errors import KVProcessorError, InvalidKVFileError, MissingEnvironmentVariableError, NamespaceNotFoundError, InvalidNamespaceError
