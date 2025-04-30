@@ -17,3 +17,21 @@ class NamespaceNotFoundError(KVProcessorError):
 class InvalidNamespaceError(KVProcessorError):
     """Raised when a namespace is invalid or malformed."""
     pass
+
+# Legacy errors
+
+class KVStructLoaderError(Exception):
+    """Base exception for KVStructLoader."""
+    pass
+
+class ConfigFetchError(KVStructLoaderError):
+    """Raised when there is an error fetching the configuration."""
+    pass
+
+class KVFetchError(KVStructLoaderError):
+    """Raised when there is an error fetching a KV file."""
+    pass
+
+class ManifestError(KVStructLoaderError):
+    """Raised when there is an issue with the manifest."""
+    pass
