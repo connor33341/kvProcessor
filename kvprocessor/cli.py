@@ -1,6 +1,7 @@
 import argparse
 from kvprocessor.kvvalidator import validate_kv_file
-from kvprocessor.kvmanifestloader import KVManifestLoader, NamespaceManager
+from kvprocessor.kvmanifestloader import KVManifestLoader
+from kvprocessor.kvnamespacemanager import NamespaceManager
 from kvprocessor.kvprocessor import KVProcessor
 from kvprocessor.kvglobalsettings import get_version
 
@@ -16,6 +17,14 @@ def main():
     # Subcommand: List namespaces
     list_parser = subparsers.add_parser("list-namespaces", help="List all namespaces")
     list_parser.add_argument("manifest", type=str, help="Path to the manifest file")
+
+    # Add a --list-namespaces command
+    list_namespaces_parser = subparsers.add_parser("list-namespaces", help="List all namespaces in a manifest")
+    list_namespaces_parser.add_argument("manifest", type=str, help="Path to the manifest file")
+
+    # Add a --validate-manifest command
+    validate_manifest_parser = subparsers.add_parser("validate-manifest", help="Validate a manifest file")
+    validate_manifest_parser.add_argument("manifest", type=str, help="Path to the manifest file")
 
     # Subcommand: Add namespace
     add_parser = subparsers.add_parser("add-namespace", help="Add a new namespace")
