@@ -43,6 +43,26 @@ def main():
     merge_parser.add_argument("files", nargs='+', help="Paths to the .kv files to merge")
     merge_parser.add_argument("output", type=str, help="Path to the output .kv file")
 
+    # Subcommand: Diff .kv files
+    diff_parser = subparsers.add_parser("diff-kv", help="Show differences between two .kv files")
+    diff_parser.add_argument("file1", type=str, help="Path to the first .kv file")
+    diff_parser.add_argument("file2", type=str, help="Path to the second .kv file")
+
+    # Subcommand: Generate namespace report
+    report_parser = subparsers.add_parser("namespace-report", help="Generate a report of namespaces")
+    report_parser.add_argument("manifest", type=str, help="Path to the manifest file")
+    report_parser.add_argument("output", type=str, help="Path to the output report file")
+
+    # Subcommand: Convert legacy config
+    convert_parser = subparsers.add_parser("convert-legacy", help="Convert legacy configuration to new format")
+    convert_parser.add_argument("legacy_config", type=str, help="Path to the legacy configuration file")
+    convert_parser.add_argument("output", type=str, help="Path to the output configuration file")
+
+    # Subcommand: Backup .kv file
+    backup_parser = subparsers.add_parser("backup-kv", help="Create a backup of a .kv file")
+    backup_parser.add_argument("file", type=str, help="Path to the .kv file")
+    backup_parser.add_argument("backup_dir", type=str, help="Directory to store the backup")
+
     args = parser.parse_args()
 
     if args.command == "validate":
@@ -109,6 +129,53 @@ def main():
             print(f"Merged .kv files into {args.output}.")
         except Exception as e:
             print(f"Error merging .kv files: {e}")
+
+    elif args.command == "diff-kv":
+        from kvprocessor.kvdiff import KVFileDiffChecker as KVFileDiff
+        try:
+            differ = KVFileDiff()
+            differences = differ.diff(args.file1, args.file2)
+            print("Differences between files:")
+            print(differences)
+        except Exception as e:
+            print(f"Error diffing .kv files: {e}")
+
+    elif args.command == "namespace-report":
+        try:
+            manifest_loader = KVManifestLoader(args.manifest)
+            manager = NamespaceManager(manifest_loader)
+            namespaces = manager.list_namespaces()
+            with open(args.output, 'w') as report_file:
+                report_file.write("Namespace Report\n")
+                report_file.write("================\n")
+                for namespace in namespaces:
+                    report_file.write(f"{namespace}\n")
+            print(f"Namespace report generated at {args.output}.")
+        except Exception as e:
+            print(f"Error generating namespace report: {e}")
+
+    elif args.command == "convert-legacy":
+        from kvprocessor.kvstructloader import KVStructLoader
+        try:
+            struct_loader = KVStructLoader(args.legacy_config)
+            new_config = struct_loader.convert_to_new_format()
+            with open(args.output, 'w') as output_file:
+                output_file.write(new_config)
+            print(f"Legacy configuration converted and saved to {args.output}.")
+        except Exception as e:
+            print(f"Error converting legacy configuration: {e}")
+
+    elif args.command == "backup-kv":
+        import os
+        import shutil
+        try:
+            if not os.path.exists(args.backup_dir):
+                os.makedirs(args.backup_dir)
+            backup_path = os.path.join(args.backup_dir, os.path.basename(args.file))
+            shutil.copy2(args.file, backup_path)
+            print(f"Backup created at {backup_path}.")
+        except Exception as e:
+            print(f"Error creating backup: {e}")
 
 if __name__ == "__main__":
     main()
