@@ -4,8 +4,9 @@ import shutil
 from pathlib import Path
 from kvprocessor.kvprocessor import KVProcessor
 from kvprocessor.kvmanifestloader import KVManifestLoader
-from kvprocessor.log import log
-from kvprocessor.errors import NamespaceNotFoundError, InvalidNamespaceError, ManifestError, ConfigFetchError, KVFetchError
+from kvprocessor.util.log import log
+from kvprocessor.util.errors import NamespaceNotFoundError, InvalidNamespaceError, ManifestError, ConfigFetchError, KVFetchError
+from kvprocessor.kvglobalsettings import get_version
 
 class KVStructLoader:
     def __init__(self, config_file: str, cache_dir: str = "./struct"):
@@ -21,6 +22,7 @@ class KVStructLoader:
         self.version = self.config["version"]
         self.root = self.config["root"]
         self.Manifest = None
+        self.manifest_version = None
         if int(str(self.version).split(".")[2]) >= 7:
             log(f"Version: {self.version} >= 7")
             self.Platform = self.config.get("platform")
@@ -30,11 +32,16 @@ class KVStructLoader:
                 self.Branch = self.config.get("branch")
                 self.Struct = self.config.get("struct")
                 self.URL = f"https://raw.githubusercontent.com/{self.Owner}/{self.Repo}/refs/heads/{self.Branch}/{self.Struct}/"
+                if (int(str(self.version).split(".")[1]) >= 2) and (int(str(self.version).split(".")[2]) >= 14):
+                    print("Using latest manifest attr")
+                    self.manifest_version = self.config.get("manifest_version")
+                    if not self.manifest_version:
+                        raise ManifestError("Manifest version is missing in the configuration. Add tag 'manifest_version' to the config. 0.2.14+")
             else:
                 self.URL = self.config.get("URL")
-            self.Manifest = self.config.get("manifest")
-            if self.Manifest:
-                self.Manifest = KVManifestLoader(f"{self.URL}{self.Manifest}", self.cache_dir, self.root)
+            manifest_file = self.config.get("manifest")
+            if manifest_file:
+                self.Manifest = KVManifestLoader(f"{self.URL}{manifest_file}", self.cache_dir, self.root, self.manifest_version or get_version())
             else:
                 raise ManifestError("Manifest file is missing in the configuration.")
         else:

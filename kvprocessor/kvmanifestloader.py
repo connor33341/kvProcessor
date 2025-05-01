@@ -4,7 +4,7 @@ import re
 from urllib.parse import urlparse, urlunparse
 from kvprocessor.kvglobalsettings import get_version_major, get_version_minor, get_version
 from kvprocessor.kvprocessor import KVProcessor
-from kvprocessor.log import log
+from kvprocessor.util.log import log
 
 class KVManifestLoader:
     def __init__(self, file_url: str, cache_dir: str = "./struct", root: str = None, manifest_version: str = get_version()):

@@ -1,7 +1,7 @@
 import re
-from kvprocessor.errors import InvalidKVFileError
+from kvprocessor.util.errors import InvalidKVFileError
 from kvprocessor.kvtypemap import get_type_map
-from kvprocessor.warnings import deprecated
+from kvprocessor.util.warnings import deprecated
 
 class KVFileValidator():
     def __init__(self):

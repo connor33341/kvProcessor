@@ -4,6 +4,7 @@ import pytest
 from kvprocessor import LoadEnv, KVProcessor, KVStructLoader
 from kvprocessor.kvfileutils import search_kv_files, copy_kv_file, delete_kv_file
 from kvprocessor.kvversionmanager import KVVersionManager
+from kvprocessor.util.errors import ManifestError
 dotenv.load_dotenv() # Load the .env file
 
 def test_file():

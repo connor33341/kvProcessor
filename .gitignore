@@ -2,3 +2,4 @@ dist
 .pypirc
 struct
 *.log
+versions
