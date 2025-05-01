@@ -1,7 +1,7 @@
 import re
 from typing import Dict, Any, Union
-from kvprocessor.log import log
-from kvprocessor.errors import InvalidKVFileError
+from kvprocessor.util.log import log
+from kvprocessor.util.errors import InvalidKVFileError
 from kvprocessor.kvtypemap import get_type_map
 
 class KVProcessor:

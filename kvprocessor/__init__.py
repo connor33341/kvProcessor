@@ -18,4 +18,6 @@ from .kvdiff import KVFileDiffChecker
 from .kvvalidator import KVFileValidator, validate_kv_file, validate_kv_key, validate_kv_value
 from .kvtypemap import get_type_map, set_type_map, remove_type_map, has_type_map, clear_type_map, add_type_map
 from .kvglobalsettings import set_version, get_version, get_version_tuple, get_version_major, get_version_minor
-from .errors import KVProcessorError, InvalidKVFileError, MissingEnvironmentVariableError, NamespaceNotFoundError, InvalidNamespaceError
+from .util.errors import KVProcessorError, InvalidKVFileError, MissingEnvironmentVariableError, NamespaceNotFoundError, InvalidNamespaceError
+from .util.warnings import deprecated as kv_deprecated_warning
+from .util.log import log as kv_log

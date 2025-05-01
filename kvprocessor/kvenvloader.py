@@ -1,6 +1,6 @@
 import os
 import warnings
-from kvprocessor.warnings import deprecated
+from kvprocessor.util.warnings import deprecated
 
 def load_env(Names: list) -> dict[str, any]:
     EnvList = {}
