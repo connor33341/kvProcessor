@@ -81,6 +81,43 @@ Namespace JSON files, have to be on a static host. They cannot be used locally. 
 }
 ```
 
+### New Features in 0.2.x
+
+#### Additional Data Types
+The library now supports additional data types such as `datetime`, `date`, `time`, and `decimal`. These can be used in `.kv` files as follows:
+
+```custom
+EVENT_DATE<datetime>:none
+PRICE<decimal>:none
+```
+
+#### Manifest Validation
+Manifests are now validated for proper structure and required fields. This ensures that namespace mappings are correctly defined.
+
+### CLI Enhancements
+The CLI now includes a `--version` flag to display the library version:
+
+```bash
+python kvprocessor.cli --version
+```
+
+### Example: Using Additional Data Types
+```python
+from kvprocessor import KVProcessor
+
+kv_file_path = "test/test.kv"  # Path to your .kv file
+kv_processor = KVProcessor(kv_file_path)
+
+# Example configuration with additional data types
+config = {
+    "EVENT_DATE": "2025-05-01T12:00:00",
+    "PRICE": "19.99",
+}
+
+validated_config = kv_processor.process_config(config)
+print(validated_config)
+```
+
 ## Building
 For building the library locally \
 **Requires**: `python3.8+`, `pip`, `linux system`(if using the predefined shell files)

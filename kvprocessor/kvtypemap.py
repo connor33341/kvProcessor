@@ -1,4 +1,6 @@
 from typing import Any, Dict
+import datetime
+import decimal
 
 type_map = {
     'string': str,
@@ -14,6 +16,13 @@ type_map = {
     'any': Any,
     'str': str
 }
+
+type_map.update({
+    'datetime': datetime.datetime,
+    'date': datetime.date,
+    'time': datetime.time,
+    'decimal': decimal.Decimal
+})
 
 def get_type_map() -> Dict[str, type]:
     """

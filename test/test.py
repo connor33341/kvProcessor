@@ -1,10 +1,14 @@
 import os
 import dotenv
 import pytest
+import datetime
+import decimal
 from kvprocessor import LoadEnv, KVProcessor, KVStructLoader
 from kvprocessor.kvfileutils import search_kv_files, copy_kv_file, delete_kv_file
 from kvprocessor.kvversionmanager import KVVersionManager
 from kvprocessor.util.errors import ManifestError
+from kvprocessor.kvtypemap import get_type_map
+from kvprocessor.kvmanifestloader import KVManifestLoader, ManifestError
 dotenv.load_dotenv() # Load the .env file
 
 def test_file():
@@ -124,6 +128,45 @@ def test_version_manager():
     version_manager.restore_version("test.kv", versions[0].split(".")[-1], restore_path)
     assert os.path.exists(restore_path)
     delete_kv_file(restore_path)
+
+def test_additional_data_types():
+    type_map = get_type_map()
+    assert 'datetime' in type_map
+    assert 'date' in type_map
+    assert 'time' in type_map
+    assert 'decimal' in type_map
+    assert type_map['datetime'] == datetime.datetime
+    assert type_map['decimal'] == decimal.Decimal
+
+def test_validate_manifest():
+    valid_manifest_content = """# A valid manifest
+    namespace1:namespace2
+    namespace3:namespace4
+    """
+    invalid_manifest_content = """# An invalid manifest
+    namespace1 namespace2
+    """
+
+    # Write valid manifest to a temporary file
+    with open("test_valid_manifest.txt", "w") as file:
+        file.write(valid_manifest_content)
+
+    # Write invalid manifest to a temporary file
+    with open("test_invalid_manifest.txt", "w") as file:
+        file.write(invalid_manifest_content)
+
+    try:
+        loader = KVManifestLoader("test_valid_manifest.txt", root="test")
+        loader.validate_manifest()  # Should pass without exceptions
+
+        loader = KVManifestLoader("test_invalid_manifest.txt", root="test")
+        try:
+            loader.validate_manifest()
+        except ManifestError as e:
+            assert "Invalid manifest format" in str(e)
+    finally:
+        os.remove("test_valid_manifest.txt")
+        os.remove("test_invalid_manifest.txt")
 
 if __name__ == "__main__":
     test_file()
