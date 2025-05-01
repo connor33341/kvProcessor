@@ -25,14 +25,14 @@ class KVFileValidator():
         except FileNotFoundError:
             raise FileNotFoundError(f"KV file not found: {self.file_path}")
 
-    def validate_kv_key(key: str) -> bool:
+    def validate_kv_key(self, key: str) -> bool:
         """Validate a single key in a .kv file."""
         match = re.match(r'(\w+)<([\w\|]+)>:([\w+]+|none)', key)
         if not match:
             raise InvalidKVFileError(f"Invalid key format: {key}")
         return True
 
-    def validate_kv_value(value: str, expected_types: list) -> bool:
+    def validate_kv_value(self, value: str, expected_types: list) -> bool:
         """Validate a value against expected types."""
         type_map = get_type_map()
         for type_name in expected_types:
