@@ -133,8 +133,8 @@ def main():
     elif args.command == "diff-kv":
         from kvprocessor.kvdiff import KVFileDiffChecker as KVFileDiff
         try:
-            differ = KVFileDiff()
-            differences = differ.diff(args.file1, args.file2)
+            differ = KVFileDiff(args.file1, args.file2)
+            differences = differ.diff()
             print("Differences between files:")
             print(differences)
         except Exception as e:
