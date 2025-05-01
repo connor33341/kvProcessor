@@ -1,6 +1,8 @@
 import os
+import urllib.parse
 import requests
 import re
+from urllib.parse import urlparse, urlunparse
 from kvprocessor.kvprocessor import KVProcessor
 from kvprocessor.kvstructloader import KVStructLoader
 from kvprocessor.log import log
@@ -14,7 +16,7 @@ class KVManifestLoader:
         self.namespace_overides = {}
         self._fetch_manifest()
         self._parse_manifest()
-        self.manifest_version = "0.1.12"
+        self.manifest_version = KVStructLoader(urlparse(self.file_url).path.rsplit('/', 1)[0] + '/config.json', self.cache_dir).version
 
     def _fetch_manifest(self):
         try:
