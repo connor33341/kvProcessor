@@ -10,4 +10,5 @@ from .kvvalidator import KVFileValidator
 from .kvversionmanager import KVVersionManager
 from .kvdiff import KVFileDiffChecker
 from .kvtypemap import get_type_map, set_type_map, remove_type_map, has_type_map, clear_type_map, add_type_map
+from .kvglobalsettings import set_version, get_version, get_version_tuple, get_version_major, get_version_minor
 from .errors import KVProcessorError, InvalidKVFileError, MissingEnvironmentVariableError, NamespaceNotFoundError, InvalidNamespaceError
