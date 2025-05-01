@@ -18,11 +18,7 @@ def main():
     list_parser = subparsers.add_parser("list-namespaces", help="List all namespaces")
     list_parser.add_argument("manifest", type=str, help="Path to the manifest file")
 
-    # Add a --list-namespaces command
-    list_namespaces_parser = subparsers.add_parser("list-namespaces", help="List all namespaces in a manifest")
-    list_namespaces_parser.add_argument("manifest", type=str, help="Path to the manifest file")
-
-    # Add a --validate-manifest command
+    # Subcommand: Validate manifest
     validate_manifest_parser = subparsers.add_parser("validate-manifest", help="Validate a manifest file")
     validate_manifest_parser.add_argument("manifest", type=str, help="Path to the manifest file")
 
@@ -36,6 +32,16 @@ def main():
     remove_parser = subparsers.add_parser("remove-namespace", help="Remove a namespace")
     remove_parser.add_argument("manifest", type=str, help="Path to the manifest file")
     remove_parser.add_argument("key", type=str, help="Namespace key")
+
+    # Subcommand: Export configuration
+    export_parser = subparsers.add_parser("export-config", help="Export configuration to a .kv file")
+    export_parser.add_argument("config", type=str, help="Path to the configuration JSON file")
+    export_parser.add_argument("output", type=str, help="Path to the output .kv file")
+
+    # Subcommand: Merge .kv files
+    merge_parser = subparsers.add_parser("merge-kv", help="Merge multiple .kv files into one")
+    merge_parser.add_argument("files", nargs='+', help="Paths to the .kv files to merge")
+    merge_parser.add_argument("output", type=str, help="Path to the output .kv file")
 
     args = parser.parse_args()
 
@@ -57,6 +63,14 @@ def main():
         except Exception as e:
             print(f"Error listing namespaces: {e}")
 
+    elif args.command == "validate-manifest":
+        try:
+            manifest_loader = KVManifestLoader(args.manifest)
+            manifest_loader.validate_manifest()
+            print(f"Manifest {args.manifest} is valid.")
+        except Exception as e:
+            print(f"Manifest validation failed: {e}")
+
     elif args.command == "add-namespace":
         try:
             manifest_loader = KVManifestLoader(args.manifest)
@@ -74,6 +88,27 @@ def main():
             print(f"Namespace {args.key} removed successfully.")
         except Exception as e:
             print(f"Error removing namespace: {e}")
+
+    elif args.command == "export-config":
+        from kvprocessor.kvfileexporter import KVFileExporter
+        import json
+        try:
+            with open(args.config, 'r') as config_file:
+                config = json.load(config_file)
+            exporter = KVFileExporter(args.output)
+            exporter.validate_and_export(config)
+            print(f"Configuration exported to {args.output}.")
+        except Exception as e:
+            print(f"Error exporting configuration: {e}")
+
+    elif args.command == "merge-kv":
+        from kvprocessor.kvfilemerger import KVFileMerger
+        try:
+            merger = KVFileMerger(args.output)
+            merger.merge(args.files)
+            print(f"Merged .kv files into {args.output}.")
+        except Exception as e:
+            print(f"Error merging .kv files: {e}")
 
 if __name__ == "__main__":
     main()
