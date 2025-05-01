@@ -1,5 +1,6 @@
 import os
 import dotenv
+import pytest
 from kvprocessor import LoadEnv, KVProcessor, KVStructLoader
 from kvprocessor.kvfileutils import search_kv_files, copy_kv_file, delete_kv_file
 from kvprocessor.kvversionmanager import KVVersionManager
@@ -56,6 +57,72 @@ def test_version_manager():
         restore_path = "test/restored_test.kv"
         version_manager.restore_version("test.kv", versions[0].split(".")[-1], restore_path)
         print(f"Restored version to: {restore_path}")
+
+@pytest.fixture
+def kv_processor():
+    kv_file_path = "test/test.kv"  # Directory to .kv file
+    return KVProcessor(kv_file_path)
+
+@pytest.fixture
+def kv_struct_loader():
+    return KVStructLoader("https://github.com/Voxa-Communications/VoxaCommunicaitons-Structures/raw/refs/heads/main/struct/config.json")
+
+def test_kv_processor_return_names(kv_processor):
+    kv_keys = kv_processor.return_names()  # Gets the keys (VARIBLENAME) from the .kv file
+    assert isinstance(kv_keys, list)
+    assert len(kv_keys) > 0
+
+def test_kv_processor_process_config(kv_processor):
+    kv_keys = kv_processor.return_names()
+    env_list = LoadEnv(kv_keys)  # Loads all the ENV variables that match those keys
+    validated_config = kv_processor.process_config(env_list)  # Verifies that those env variables exist and are of the correct type
+    assert isinstance(validated_config, dict)
+
+def test_kv_struct_loader_root(kv_struct_loader):
+    assert kv_struct_loader.root == "voxa"
+
+def test_kv_struct_loader_url(kv_struct_loader):
+    assert kv_struct_loader.URL.startswith("https://")
+
+def test_kv_struct_loader_namespace(kv_struct_loader):
+    kv_processor = kv_struct_loader.from_namespace("voxa.api.user.user_settings")
+    user_settings = {
+        "2FA_ENABLED": True,
+        "TELEMETRY": False,
+        "AGE": "25",
+        "LANGUAGE": "en",
+    }
+    validated_config = kv_processor.process_config(user_settings)
+    assert isinstance(validated_config, dict)
+    assert validated_config["2FA_ENABLED"] is True
+    assert validated_config["TELEMETRY"] is False
+
+def test_file_operations():
+    kv_files = search_kv_files("test")
+    assert len(kv_files) > 0
+
+    test_file = kv_files[0]
+    copy_path = "test/copy_test.kv"
+    copy_kv_file(test_file, copy_path)
+    assert os.path.exists(copy_path)
+
+    delete_kv_file(copy_path)
+    assert not os.path.exists(copy_path)
+
+def test_version_manager():
+    version_manager = KVVersionManager("test/versions")
+
+    test_file = "test/test.kv"
+    versioned_file = version_manager.save_version(test_file)
+    assert os.path.exists(versioned_file)
+
+    versions = version_manager.list_versions("test.kv")
+    assert len(versions) > 0
+
+    restore_path = "test/restored_test.kv"
+    version_manager.restore_version("test.kv", versions[0].split(".")[-1], restore_path)
+    assert os.path.exists(restore_path)
+    delete_kv_file(restore_path)
 
 if __name__ == "__main__":
     test_file()
