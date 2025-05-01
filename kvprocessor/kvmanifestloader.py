@@ -3,6 +3,7 @@ import urllib.parse
 import requests
 import re
 from urllib.parse import urlparse, urlunparse
+from kvprocessor.kvglobalsettings import get_version_major, get_version_minor, get_version
 from kvprocessor.kvprocessor import KVProcessor
 from kvprocessor.kvstructloader import KVStructLoader
 from kvprocessor.log import log
@@ -16,7 +17,7 @@ class KVManifestLoader:
         self.namespace_overides = {}
         self._fetch_manifest()
         self._parse_manifest()
-        self.manifest_version = KVStructLoader(urlparse(self.file_url).path.rsplit('/', 1)[0] + '/config.json', self.cache_dir).version
+        self.manifest_version = KVStructLoader(str(urlparse(self.file_url).path.rsplit('/', 1)[0] + '/config.json'), self.cache_dir).version or get_version()
 
     def _fetch_manifest(self):
         try:
