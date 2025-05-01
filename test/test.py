@@ -3,6 +3,7 @@ import dotenv
 import pytest
 import datetime
 import decimal
+import subprocess
 from kvprocessor import LoadEnv, KVProcessor, KVStructLoader
 from kvprocessor.kvfileutils import search_kv_files, copy_kv_file, delete_kv_file
 from kvprocessor.kvversionmanager import KVVersionManager
@@ -167,6 +168,41 @@ def test_validate_manifest():
     finally:
         os.remove("test_valid_manifest.txt")
         os.remove("test_invalid_manifest.txt")
+
+def test_list_namespaces():
+    manifest_content = """# Example manifest
+    namespace1:namespace2
+    namespace3:namespace4
+    """
+
+    # Write manifest to a temporary file
+    with open("test_manifest.txt", "w") as file:
+        file.write(manifest_content)
+
+    try:
+        loader = KVManifestLoader("test_manifest.txt", root="test")
+        namespaces = loader.list_namespaces()
+        assert namespaces == ["namespace1", "namespace3"]
+    finally:
+        os.remove("test_manifest.txt")
+
+def test_cli_list_namespaces():
+    manifest_content = """# Example manifest
+    namespace1:namespace2
+    namespace3:namespace4
+    """
+
+    # Write manifest to a temporary file
+    with open("test_manifest.txt", "w") as file:
+        file.write(manifest_content)
+
+    try:
+        result = subprocess.run(["python3", "-m", "kvprocessor.cli", "list-namespaces", "test_manifest.txt"], capture_output=True, text=True)
+        assert result.returncode == 0
+        assert "namespace1" in result.stdout
+        assert "namespace3" in result.stdout
+    finally:
+        os.remove("test_manifest.txt")
 
 if __name__ == "__main__":
     test_file()
