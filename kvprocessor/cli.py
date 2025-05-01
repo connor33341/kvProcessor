@@ -2,9 +2,11 @@ import argparse
 from kvprocessor.kvvalidator import validate_kv_file
 from kvprocessor.kvmanifestloader import KVManifestLoader, NamespaceManager
 from kvprocessor.kvprocessor import KVProcessor
+from kvprocessor.kvglobalsettings import get_version
 
 def main():
     parser = argparse.ArgumentParser(description="CLI for kvProcessor")
+    parser.add_argument("--version", action="version", version=f"kvProcessor {get_version()}", help="Show the version of kvProcessor")
     subparsers = parser.add_subparsers(dest="command")
 
     # Subcommand: Validate .kv file
