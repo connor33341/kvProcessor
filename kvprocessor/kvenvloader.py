@@ -1,4 +1,6 @@
 import os
+import warnings
+from kvprocessor.warnings import deprecated
 
 def load_env(Names: list) -> dict[str, any]:
     EnvList = {}
@@ -7,6 +9,6 @@ def load_env(Names: list) -> dict[str, any]:
         EnvList[Name] = Value
     return EnvList
 
+@deprecated
 def LoadEnv(Names: list) -> dict[str, any]:
-    print("Using depricated function, update to load_env")
     return load_env(Names)

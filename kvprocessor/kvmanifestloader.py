@@ -1,15 +1,13 @@
 import os
-import urllib.parse
 import requests
 import re
 from urllib.parse import urlparse, urlunparse
 from kvprocessor.kvglobalsettings import get_version_major, get_version_minor, get_version
 from kvprocessor.kvprocessor import KVProcessor
-from kvprocessor.kvstructloader import KVStructLoader
 from kvprocessor.log import log
 
 class KVManifestLoader:
-    def __init__(self, file_url: str, cache_dir: str = "./struct", root: str = None):
+    def __init__(self, file_url: str, cache_dir: str = "./struct", root: str = None, manifest_version: str = get_version()):
         self.file_url = file_url
         self.cache_dir = cache_dir
         self.root = root
@@ -17,7 +15,7 @@ class KVManifestLoader:
         self.namespace_overides = {}
         self._fetch_manifest()
         self._parse_manifest()
-        self.manifest_version = KVStructLoader(str(urlparse(self.file_url).path.rsplit('/', 1)[0] + '/config.json'), self.cache_dir).version or get_version()
+        self.manifest_version = manifest_version
 
     def _fetch_manifest(self):
         try:
@@ -63,31 +61,3 @@ class KVManifestLoader:
         except FileNotFoundError:
             print(f"Manifest file not found: {self.file_url}")
             return None
-
-class NamespaceManager:
-    """Utility class for managing namespaces dynamically."""
-
-    def __init__(self, manifest_loader: KVManifestLoader):
-        self.manifest_loader = manifest_loader
-
-    def add_namespace(self, key: str, value: str):
-        """Add a new namespace to the manifest."""
-        if key in self.manifest_loader.namespace_overides:
-            raise ValueError(f"Namespace {key} already exists.")
-        self.manifest_loader.namespace_overides[key] = value
-
-    def remove_namespace(self, key: str):
-        """Remove a namespace from the manifest."""
-        if key not in self.manifest_loader.namespace_overides:
-            raise KeyError(f"Namespace {key} does not exist.")
-        del self.manifest_loader.namespace_overides[key]
-
-    def list_namespaces(self) -> list:
-        """List all available namespaces."""
-        return list(self.manifest_loader.namespace_overides.keys())
-
-    def update_namespace(self, key: str, new_value: str):
-        """Update an existing namespace."""
-        if key not in self.manifest_loader.namespace_overides:
-            raise KeyError(f"Namespace {key} does not exist.")
-        self.manifest_loader.namespace_overides[key] = new_value
