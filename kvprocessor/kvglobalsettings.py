@@ -6,7 +6,7 @@ version = str(kvprocessor.__version__)
 def set_version(v: str):
     """Set the version of the KVProcessor."""
     global version
-    verison = v
+    version = v
 
 def get_version() -> str:
     """Get the version of the KVProcessor."""
