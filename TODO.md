@@ -14,3 +14,4 @@
  - Update cli to support 0.2.x verions of the API
  - Expand `kvprocessor.kvtypemap` to support more types.
  - Update `kvprocessor.kvmanifestloader` to be more feature rich
+ - Fix the style, so it will lint correctly
