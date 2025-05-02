@@ -21,3 +21,6 @@ from .kvglobalsettings import set_version, get_version, get_version_tuple, get_v
 from .util.errors import KVProcessorError, InvalidKVFileError, MissingEnvironmentVariableError, NamespaceNotFoundError, InvalidNamespaceError
 from .util.warnings import deprecated as kv_deprecated_warning
 from .util.log import log as kv_log
+
+# CLI
+from .cli import main as kv_cli_main # idealy you dont use this, and use cli directly, however, if you are lazy, just import it, then run kvprocessor.kv_cli_main() to run the CLI
