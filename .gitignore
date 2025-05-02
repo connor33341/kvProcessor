@@ -3,3 +3,4 @@ dist
 struct
 *.log
 versions
+.mypy_cache
