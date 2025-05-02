@@ -11,9 +11,10 @@ def set_version(v: str):
 def get_version() -> str:
     """Get the version of the KVProcessor."""
     return version
-def get_version_tuple() -> tuple[int, int, int]:
+def get_version_tuple() -> tuple[int, ...]:
     """Get the version of the KVProcessor as a tuple."""
-    return tuple(map(int, version.split('.')))
+    version_parts = version.split('.')
+    return tuple(map(int, version_parts[:3]))
 def get_version_major() -> int:
     """Get the major version of the KVProcessor."""
     return int(version.split('.')[0])

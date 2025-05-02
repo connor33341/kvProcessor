@@ -1,8 +1,9 @@
 import os
 import warnings
-from kvprocessor.util.warnings import deprecated
+from typing import Any, Optional
+from kvprocessor.util.warnings import deprecated, ignore_warnings
 
-def load_env(Names: list, defaults: dict = None) -> dict[str, any]:
+def load_env(Names: list, defaults: Optional[dict] = None) -> dict[str, Any]:
     """
     Load environment variables into a dictionary.
 
@@ -36,8 +37,9 @@ def validate_env(Names: list) -> None:
     if missing_vars:
         raise EnvironmentError(f"The following required environment variables are missing: {', '.join(missing_vars)}")
 
+@ignore_warnings
 @deprecated
-def LoadEnv(Names: list, defaults: dict = None) -> dict[str, any]:
+def LoadEnv(Names: list, defaults: Optional[dict] = None) -> dict[str, Any]:
     """
     Deprecated wrapper for load_env.
 

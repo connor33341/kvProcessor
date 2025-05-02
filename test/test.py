@@ -34,7 +34,7 @@ def test_struct_loader():
     validated_config = kv_processor.process_config(user_settings) # Verifies that those env varibles exist and are of the correct type
     print(validated_config)
 
-def test_file_operations():
+def test_file_operations_v2():
     print("Testing file operations")
     kv_files = search_kv_files("test")
     print("Found .kv files:", kv_files)
@@ -48,7 +48,7 @@ def test_file_operations():
         delete_kv_file(copy_path)
         print(f"Deleted {copy_path}")
 
-def test_version_manager():
+def test_version_manager_v2():
     print("Testing version manager")
     version_manager = KVVersionManager("test/versions")
 
@@ -207,5 +207,5 @@ def test_cli_list_namespaces():
 if __name__ == "__main__":
     test_file()
     test_struct_loader()
-    test_file_operations()
-    test_version_manager()
+    test_file_operations_v2()
+    test_version_manager_v2()
