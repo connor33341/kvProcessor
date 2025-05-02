@@ -85,8 +85,8 @@ class KVStructLoader:
         
         if self.Manifest:
             log(f"Using Manifest to load KVProcessor from namespace: {namespace}")
-            if namespace in self.Manifest.namespace_overides:
-                namespace = self.Manifest.namespace_overides[namespace]
+            if namespace in self.Manifest.namespace_overrides:
+                namespace = self.Manifest.namespace_overrides[namespace]
                 log(f"Namespace overridden to: {namespace}")
             else:
                 log(f"Namespace not found in manifest, using original: {namespace}")

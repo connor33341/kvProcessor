@@ -14,11 +14,11 @@ class KVManifestLoader:
         self.manifest_version = manifest_version
         self.root = root
         self.manifest = None
-        self.namespace_overides = {}
+        self.namespace_overrides = {}
         self._fetch_manifest()
+        self._parse_manifest()
         if int(str(self.manifest_version).strip().split(".")[1]) >= 2:
             self.validate_manifest()
-        self._parse_manifest()
 
     def _fetch_manifest(self):
         try:
@@ -60,7 +60,7 @@ class KVManifestLoader:
                         log("Found namespace overide")
                     key, value = match.groups()
                     log(f"Parsing Line {i} key={key}, value={value}")    
-                    self.namespace_overides[key] = value     
+                    self.namespace_overrides[key] = value     
         except FileNotFoundError:
             print(f"Manifest file not found: {self.file_url}")
             return None
