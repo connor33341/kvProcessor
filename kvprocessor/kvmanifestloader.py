@@ -50,7 +50,7 @@ class KVManifestLoader:
                         continue
                     match: dict = re.match(r'([^:]+):([^:]+)', line)
                     if not match:
-                        if str(self.manifest_version).strip().split(".")[1] >= 2:
+                        if int(str(self.manifest_version).strip().split(".")[1]) >= 2:
                             if (len(line.split(":")) == 0) and (len(line.split(".")) >= 1):
                                 log("Found namespace")
                                 match.clear()
