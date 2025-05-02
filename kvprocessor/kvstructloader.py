@@ -127,4 +127,4 @@ class KVStructLoader:
         """List all available namespaces from the manifest."""
         if not self.Manifest:
             raise ManifestError("Manifest is not loaded.")
-        return list(self.Manifest.namespace_overides.keys())
+        return list(self.Manifest.namespace_overrides.keys())
