@@ -41,7 +41,8 @@ class KVProcessor:
         for type_name in expected_types:
             if type_name not in type_map:
                 raise ValueError(f"Unsupported type in .kv file: {type_name}")
-            if isinstance(value, tuple(type_map[type_name] if isinstance(type_map[type_name], tuple) else [type_map[type_name]])):
+            expected_type = type_map[type_name] if isinstance(type_map[type_name], tuple) else (type_map[type_name],)
+            if isinstance(value, expected_type):
                 return True
         return False
 
