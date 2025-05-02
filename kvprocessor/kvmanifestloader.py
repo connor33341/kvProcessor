@@ -14,7 +14,7 @@ class KVManifestLoader:
         self.manifest_version = manifest_version
         self.root = root
         self.manifest = None
-        self.namespace_overrides = {}
+        self.namespace_overrides: dict[str, str] = {}
         self._fetch_manifest()
         self._parse_manifest()
         if int(str(self.manifest_version).strip().split(".")[1]) >= 2:
