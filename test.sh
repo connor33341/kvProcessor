@@ -2,7 +2,7 @@
 
 # CONFIGURATION
 LINTING="false"
-TYPE_CHECKING="false"
+TYPE_CHECKING="true"
 SECURITY_CHECKING="false"
 CLEANUP="true"
 
@@ -62,6 +62,12 @@ if [ "$TYPE_CHECKING" = "true" ]; then
     python3 -m pip install mypy
     if [ $? -ne 0 ]; then
         echo "Failed to install mypy. Exiting."
+        exit 1
+    fi
+
+    mypy --install-types --non-interactive
+    if [ $? -ne 0 ]; then
+        echo "Failed to install types for mypy. Exiting."
         exit 1
     fi
 

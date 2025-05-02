@@ -1,8 +1,8 @@
-from typing import Any, Dict
+from typing import Any
 import datetime
 import decimal
 
-type_map = {
+type_map: dict[str, Any] = {
     'string': str,
     'int': int,
     'float': float,
@@ -14,17 +14,14 @@ type_map = {
     'set': set,
     'object': object,
     'any': Any,
-    'str': str
-}
-
-type_map.update({
+    'str': str,
     'datetime': datetime.datetime,
     'date': datetime.date,
     'time': datetime.time,
-    'decimal': decimal.Decimal
-})
+    'decimal': decimal.Decimal,
+}
 
-def get_type_map() -> Dict[str, type]:
+def get_type_map() -> dict[str, Any]:
     """
     Returns the type map for KV types.
     
@@ -32,7 +29,7 @@ def get_type_map() -> Dict[str, type]:
     """
     return type_map
 
-def set_type_map(new_type_map: Dict[str, type]) -> None:
+def set_type_map(new_type_map: dict[str, Any]) -> None:
     """
     Replaces the current type map with a new one.
     
@@ -41,7 +38,7 @@ def set_type_map(new_type_map: Dict[str, type]) -> None:
     global type_map
     type_map = new_type_map
 
-def add_type_map(key: str, value: type) -> None:
+def add_type_map(key: str, value: Any) -> None:
     """
     Adds or overrides a single key-value pair in the type map.
     

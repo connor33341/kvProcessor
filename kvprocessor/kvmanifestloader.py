@@ -6,9 +6,10 @@ from kvprocessor.kvglobalsettings import get_version_major, get_version_minor, g
 from kvprocessor.kvprocessor import KVProcessor
 from kvprocessor.util.log import log
 from kvprocessor.util.errors import ManifestError
+from typing import Optional
 
 class KVManifestLoader:
-    def __init__(self, file_url: str, cache_dir: str = "./struct", root: str = None, manifest_version: str = get_version()):
+    def __init__(self, file_url: str, cache_dir: str = "./struct", root: Optional[str] = None, manifest_version: str = get_version()):
         self.file_url = file_url
         self.cache_dir = cache_dir
         self.manifest_version = manifest_version
