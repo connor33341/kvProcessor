@@ -1,4 +1,4 @@
-__version__ = "0.2.14"
+__version__ = "0.2.15"
 
 from .kvprocessor import KVProcessor
 from .kvenvloader import load_env, LoadEnv

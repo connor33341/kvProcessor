@@ -77,3 +77,7 @@ class KVProcessor:
     def return_names(self) -> list:
         """Return the names of the keys in the KV file."""
         return list(self.config_spec.keys())
+    
+    def return_values(self) -> list:
+        """Return the default values from the KV file."""
+        return [spec['default'] for spec in self.config_spec.values()]
